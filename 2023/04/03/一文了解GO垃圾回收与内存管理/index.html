@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/77298781_p0.jpg">
 <meta property="article:published_time" content="2023-04-03T07:21:16.000Z">
-<meta property="article:modified_time" content="2023-04-03T07:59:22.475Z">
+<meta property="article:modified_time" content="2023-04-03T08:41:01.673Z">
 <meta property="article:author" content="夜航船">
 <meta property="article:tag" content="GO">
 <meta name="twitter:card" content="summary">
@@ -57,7 +57,7 @@
   isHome: false,
   isHighlightShrink: false,
   isToc: true,
-  postUpdate: '2023-04-03 15:59:22'
+  postUpdate: '2023-04-03 16:41:01'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -161,7 +161,7 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/avatar1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/77298781_p0.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="夜航船"><span class="site-name">夜航船</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">一文了解GO垃圾回收与内存管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-03T07:21:16.000Z" title="发表于 2023-04-03 15:21:16">2023-04-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-03T07:59:22.475Z" title="更新于 2023-04-03 15:59:22">2023-04-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%80%E6%96%87%E7%B3%BB%E5%88%97/">一文系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="一文了解GO垃圾回收与内存管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/04/03/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3GO%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#post-comment"><span class="gitalk-comment-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一文了解GO垃圾回收与内存管理"><a href="#一文了解GO垃圾回收与内存管理" class="headerlink" title="一文了解GO垃圾回收与内存管理"></a>一文了解GO垃圾回收与内存管理</h1><h2 id="GC-常识"><a href="#GC-常识" class="headerlink" title="GC 常识"></a>GC 常识</h2><p>GC，即垃圾回收，是一种自动内存管理的机制。当程序向操作系统申请的内存不再需要时，垃圾回收主动将其回收，并供其他代码进行内存申请时复用，或者将其归还给操作系统。这种对内存级别资源的自动回收过程称为垃圾回收，负责垃圾回收的程序组件称为垃圾回收器。</p>
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/avatar1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/77298781_p0.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="夜航船"><span class="site-name">夜航船</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">一文了解GO垃圾回收与内存管理</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-03T07:21:16.000Z" title="发表于 2023-04-03 15:21:16">2023-04-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-03T08:41:01.673Z" title="更新于 2023-04-03 16:41:01">2023-04-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%80%E6%96%87%E7%B3%BB%E5%88%97/">一文系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="一文了解GO垃圾回收与内存管理"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/04/03/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3GO%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/#post-comment"><span class="gitalk-comment-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一文了解GO垃圾回收与内存管理"><a href="#一文了解GO垃圾回收与内存管理" class="headerlink" title="一文了解GO垃圾回收与内存管理"></a>一文了解GO垃圾回收与内存管理</h1><h2 id="GC-常识"><a href="#GC-常识" class="headerlink" title="GC 常识"></a>GC 常识</h2><p>GC，即垃圾回收，是一种自动内存管理的机制。当程序向操作系统申请的内存不再需要时，垃圾回收主动将其回收，并供其他代码进行内存申请时复用，或者将其归还给操作系统。这种对内存级别资源的自动回收过程称为垃圾回收，负责垃圾回收的程序组件称为垃圾回收器。</p>
 <p>垃圾回收的好处体现在两方面。一方面，程序员<strong>不需要对内存进行手动地申请和释放操作</strong>，GC 会在程序运行时自动释放残留的内存。另一方面，<strong>GC 对程序员几乎透明</strong>，只有在程序需要特殊优化时，通过提供可调控的 API，对 GC 的运行时机、运行开销进行把控时才得以现身。</p>
 <p>通常垃圾回收分为两个半独立的组件：</p>
 <ol>
@@ -209,7 +209,7 @@
 </ol>
 <p>这三种不变性所定义的回收过程其实是一个波面不断前进的过程，这个波面同时也是黑色对象和白色对象的边界，灰色对象就是这个波面。</p>
 <p>当垃圾回收开始时，只有白色对象。随着标记过程的进行，灰色对象开始出现，这时波面开始扩大，当一个对象的所有子节点都扫描完毕，会被着色为黑色。整个堆遍历完成时，只剩下黑色对象和白色对象，黑色对象为可达对象，存活；白色对象为不可达对象，需要被回收。</p>
-<p><img src="/static/boxcnsWC4gZFfmEeJs26mledioh.jpg"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/1280X1280.jpg" alt="image"></p>
 <h3 id="STW"><a href="#STW" class="headerlink" title="STW"></a>STW</h3><p>通常意义上指代从 Stop the World 这一动作到 Start the World 这一动作发生时的这一段时间间隔。它是在垃圾回收过程中为了保证实现的正确性、防止无止境内存增长等问题而不可避免的需要停止赋值器进一步操作对象图的过程。</p>
 <p>在这个过程中，整个用户代码被停止或者放缓执行，STW 越长，对用户代码造成的影响就越大。</p>
 <p>当要考虑用户程序 STW 时延时，可以用增量 gc，但是可能会导致一些错误：</p>
@@ -259,7 +259,7 @@
 <ul>
 <li>增量式垃圾回收</li>
 </ul>
-<p><img src="/static/boxcnVbin5HiYdKZXGLu409IT0g.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/31d61257.png"></p>
 <blockquote>
 <p>考虑多核场景</p>
 </blockquote>
@@ -276,8 +276,8 @@
 <li><p>主体并发增量式回收</p>
 </li>
 </ul>
-<p><img src="/static/boxcn6INkQY3Xq32zntD58E4mfc.png"></p>
-<h3 id="GC-执行流程"><a href="#GC-执行流程" class="headerlink" title="GC 执行流程"></a>GC 执行流程</h3><p><img src="/static/boxcn3BEUWNmDmuEuSdvOk694pf.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/0d64fb5b.png"></p>
+<h3 id="GC-执行流程"><a href="#GC-执行流程" class="headerlink" title="GC 执行流程"></a>GC 执行流程</h3><p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/b54a8a09.png"></p>
 <p>当前版本的 Go 以 STW 为界限，可以将 GC 划分为五个阶段：</p>
 <table>
 <thead>
@@ -338,7 +338,7 @@
 </tr>
 </tbody></table>
 <p>各个阶段的触发函数如图所示：</p>
-<p><img src="/static/boxcnIGOwlHrxh3zGCpUT4xNUUg.jpg"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/d5db8d84.jpg"></p>
 <p>具体流程：</p>
 <ul>
 <li>GC 在准备阶段会为每个 P 创建一个 mark worker 协程，即 p.gcBgMarkWorker（现在好像变成了一个池），后台 makr worker 很快就进入休眠，等待到标记阶段进入执行</li>
@@ -351,21 +351,21 @@
 <li>当没有标记工作的时候，进入第二个 STW，将<strong>gcphrase</strong>设置为<strong>_GCMarkTermination</strong>，确认标记工作已经完成，并将<strong>gcBlackenEnabled</strong>标记为<strong>0</strong></li>
 <li>接下来进入<strong>_GCOff</strong>阶段，将<strong>gcphrase</strong>标记为<strong>_GCOff</strong>，关闭写屏障，设置<strong>writeBarrier.enabled&#x3D;false</strong>，Start The World，进入清扫流程。在 GCMarkTermination 阶段分配的新对象会被直接标记为黑色，而到 GCOFF 阶段，新分配的对象会被标记为白色。<strong>bgsweep</strong>开始调度。到达清扫阶段，bgsweep 会被加到 runq 中，得到调度执行时会执行清扫任务。完成清扫开始前需要确保上次清扫任务已完成。</li>
 </ul>
-<p><img src="/static/boxcnjEL1nKgu1Q8u4fvtrqKXKt.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/09a03070.png"></p>
 <h3 id="GC-如何找到需要标记的对象，如何标记"><a href="#GC-如何找到需要标记的对象，如何标记" class="headerlink" title="GC 如何找到需要标记的对象，如何标记"></a>GC 如何找到需要标记的对象，如何标记</h3><ul>
 <li>标记工作要从扫描 bss 段、数据段、以及协程栈上的这些 root 结点开始，追踪到堆上的节点。</li>
 <li>Go 语言在<strong>编译阶段会生成 bss 段、数据段等对应的元数据</strong>，存储在可执行文件中。通过各模块对应的 moduledata 可以获得 gcdatamask、gcbssmask 等信息，它们会被用于<strong>判断特定 root 节点是否为指针</strong>。</li>
 <li>协程栈也有对应的元数据，存储在 stackmao 中。扫描协程栈时，通过对应元数据，可以知道栈上的局部变量、参数、返回值等对象中，<strong>哪些是存活的指针。</strong>还要进一步<strong>判断是否指向堆内存，是的话就要加入 GC 工作队列中，进行进一步的扫描。</strong></li>
 <li>确定了 root 节点是否为指针，还要再进一步判断这些指针是否指向堆内存，如果指向堆内存就得把它们加入到 GC 工作队列中进行进一步的扫描。</li>
 </ul>
-<p><img src="/static/boxcnwactt61fhBFMm9m3C1lw3f.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/13ee6e59.png"></p>
 <ul>
 <li>堆上的对象也有元数据</li>
 <li>mheap 中每个 arena 都有个<strong>HeapArena 记录 arena 的元数据信息</strong>，其中有一个<strong>bitmap</strong>，可以<strong>标记 arena 中连续四个指针大小的内存（称为 word）</strong>，每个 word 对应的两个 bit 中，<strong>低位的 bit 用于标识这个是否为指针</strong>（1 为指针，0 位非指针），<strong>高位 bit 用于标识是否需要继续扫描</strong>，为 1 时代表扫描完当前 word 并不能完成当前数据对象的扫描（意味着这个数据对象比较大，占了多个 word）</li>
 <li>bitmap 信息在分配内存的时候设置，会使用到对应元数据的 gcdata 的信息，HeapArena 中还有个<strong>spans</strong>字段，<strong>是一个*mspan 类型的数组</strong>，用于<strong>记录当前 arena 中每一页对到哪一个 span</strong></li>
 <li>基于 HeapArena 记录的元数据信息，我们只要知道一个对象的地址，就可以根据 bitmap 信息扫描它内部是否含有指针，也可以根据对象地址计算出它在哪一页，然后通过 spans 信息查到该对象存在哪一个 span 中。</li>
 </ul>
-<p><img src="/static/boxcnGpm2J29LjuEZYHLn8lEwhe.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/787c4ea6.png"></p>
 <ul>
 <li><strong>每一个 span 都对应了两个位图标记 bitmap</strong>，记录在 mspan 中。</li>
 <li>mspan.<strong>allocBits</strong>中每一位标记<strong>一个对象存储单元是否已分配</strong>alloced。</li>
@@ -373,7 +373,7 @@
 <li>有了这些元数据和位图标记就能知道哪一个对象是需要被标记为灰色的，将其 gcmarkBits 标记为 1，并将其加入到工作队列中</li>
 <li>使用 bitmap 来记录回收内存的位置：大幅优化垃圾回收器自身消耗的内存</li>
 </ul>
-<p><img src="/static/boxcnk3vj34bjfdu5q4KEUyPDJ4.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/e3161002.png"></p>
 <h3 id="工作队列与工作缓冲区"><a href="#工作队列与工作缓冲区" class="headerlink" title="工作队列与工作缓冲区"></a>工作队列与工作缓冲区</h3><ul>
 <li><p>全局变量 work 中记录了<strong>全局工作缓存</strong></p>
 </li>
@@ -392,7 +392,7 @@
 <li><p>通过区分本地工作队列与全局工作缓存，并为每个 P 设置写屏障缓冲区，缓解了执行并发标记工作时操作工作队列的竞争问题。</p>
 </li>
 </ul>
-<p><img src="/static/boxcnx0BMrMvmFqoxct5TrbuGDf.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/180915aa.png"></p>
 <h3 id="GC-对-CPU-的使用率"><a href="#GC-对-CPU-的使用率" class="headerlink" title="GC 对 CPU 的使用率"></a>GC 对 CPU 的使用率</h3><p>主要是处理 mark worker 调度的问题</p>
 <p>gc 默认的 cpu 目标使用率为 25%</p>
 <p>在 gc 初始化阶段，会更具有 ginmaxprocs*目标使用率来计算要启用的 mark worker 数量</p>
@@ -414,7 +414,7 @@
 <p><strong>p</strong>会记录<strong>自己执行 fractional woker 的时间</strong>（<strong>gcFractionalMarkTime</strong>）和<strong>当前 worker 开始工作的时间</strong>（<strong>gcMarkWorkerStartTime</strong>），<strong>gcController</strong>会<strong>记录本轮 gc 工作开始的时间</strong>（<strong>markStartTime</strong>）</p>
 <p>当前 p 执行 fractional 模式的 worker 时，<strong>每完成一定量的工作后都会去检查是否达到了 fractional 的部分条件</strong>，即（fractional 模式累计时间&#x2F;本轮标记总时间）是否超过 fractionalUtilizationGoal，如果达到了就主动让出当前 worker</p>
 <p>有效控制 cpu 的使用率</p>
-<p><img src="/static/boxcnWi5VoilGuzhIZOwbeV9emd.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/c7fc3b07.png"></p>
 <h3 id="GC-缓解内存分配压力"><a href="#GC-缓解内存分配压力" class="headerlink" title="GC 缓解内存分配压力"></a>GC 缓解内存分配压力</h3><p>实现了<strong>GC Assist 机制</strong>，其实是一种<strong>借贷偿还</strong>机制</p>
 <p>如果协程在请求分配内存时，此时 mark 工作没有结束，那么该协程就要分摊一部分的 mark 工作。申请的内存越大，要偿还的债务就越多</p>
 <p>当前 g 的 gcAssistBytes 小于 0，则代表负债，否则表示有结余</p>
@@ -422,7 +422,7 @@
 <p>当后台 mark worker 完成了一定量的 mark 工作，就会在 gcController 这里存一部分的信用（bgScanCredit），欠债的协程可以在这 steal 一部分尽量大的信用来抵消债务，如果就剩就留着当结余，用于抵消下次债务</p>
 <p>gc 的标记阶段，每次内存分配都会检查是否需要辅助标记，gc 的清扫阶段每次内存分配就可能会触发执行辅助清扫，如直接从 mheap 分配一个大对象内存时，为了维护堆内存分配量和清扫页面数量的线性关系，可能需要先清扫，再分配。如从本地缓存中分配一个 span 时，如果遇到了没分配的 span，需要先清扫再分配</p>
 <p>避免并发垃圾回收中因为过大的内存分配压力导致 gc 来不及回收的情况</p>
-<p><img src="/static/boxcndKDUUb0Y2pF5q90nRdarhg.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/01fecd6c.png"></p>
 <h3 id="混合写屏障"><a href="#混合写屏障" class="headerlink" title="混合写屏障"></a>混合写屏障</h3><ul>
 <li>GC 使用写屏障来追踪指针的赋值操作，Go 使用的是一种<strong>组合了删除写屏障和插入写屏障的混合写屏障</strong>。删除写屏障负责对地址被覆盖掉的对象进行着色，插入写屏障负责对新地址指向的对象进行着色。在 goroutine 的栈是灰色的时候，才有必要执行插入写屏障。</li>
 <li>按照这种设计思想，混合写屏障的伪代码如下：</li>
@@ -434,13 +434,13 @@
 <li>在引入混合写屏障之前，只有插入写屏障，但是这需要对所有堆、栈的写操作都开启写屏障，代价太大。为了改善这个问题，改为忽略协程栈上的写屏障，只在标记结束阶段重新扫描那些被激活的栈帧。但 Go 语言通常会有大量活跃的协程，这就导致第二次 STW 时，重新扫描协程栈的时间太长。</li>
 <li>如果在当前栈忽略写屏障的前提下，能够保证写入栈上的数据对象不会被 hiding，就不用在第二次 STW 时重新扫描这些栈帧了，而删除写屏障恰好可以保障这一点。例如这里，当前 G 的栈帧中 A 已经完成扫描 ，然后 G 执行，把 old 写入栈上的本地变量 A。栈上并没有插入写屏障，old 不会被标记，之后把新指针 ptr 写入 slot。如果没有引入删除写屏障，抵达 old 的唯一路径被切断，old 就不能被 GC 发现了。所以需要在删除 old 的可达路径时，通过删除写屏障把它标记为灰色。</li>
 </ul>
-<p><img src="/static/boxcnf1hf7dSNpf5aXS7w2El2I5.png"></p>
-<p><img src="/static/boxcntdEePUtQfDu4uatL1ClSRg.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/d3f0f663-51fe.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/602af317.png"></p>
 <ul>
 <li>如果 slot 已经标记为黑色，栈上的 C 还未被扫描，几天下来 G 执行，把 ptr 写入 slot。而当前 G 切断 C 到 ptr 的可达路径时，并没有删除写屏障，不会标记 ptr。为了避免将白色对象写入堆上的黑色对象，就要靠插入写屏障在写入 slot 是标记新指针。至于判断当前栈是否为灰色，是因为如果当前是已经完成扫描的黑色栈，那么它指向的对象一定已经被标记了，插入写屏障这里就没必要再标记一次了。</li>
 </ul>
-<p><img src="/static/boxcnebPHOylQ2oXvMhaNOo0BSe.png"></p>
-<p><img src="/static/boxcn8xCyWRjBHhpxyKPKlwno1f.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/29f2b060.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/3a781fa3.png"></p>
 <ul>
 <li>所以，使用混合写屏障的意义在于，既可以忽略当前栈帧的写屏障，也不用在第二次 STW 时，重新扫描所有活跃 G 的栈帧。</li>
 </ul>
@@ -460,7 +460,7 @@
 <h2 id="内存结构"><a href="#内存结构" class="headerlink" title="内存结构"></a>内存结构</h2><h3 id="堆内存管理结构"><a href="#堆内存管理结构" class="headerlink" title="堆内存管理结构"></a>堆内存管理结构</h3><p><a target="_blank" rel="noopener" href="https://vwn3qg1pgo.feishu.cn/docs/doccnK4IZu1h1pXcMhiTH0nzUnb">https://vwn3qg1pgo.feishu.cn/docs/doccnK4IZu1h1pXcMhiTH0nzUnb</a></p>
 <p>mheap 管理着地址空间的一大段连续的内存</p>
 <p>以 8K 为一页，多个页（8K）组成一个 span，多个 span 组成一个 arena，每个 span 只存储一种大小的元素</p>
-<p><img src="/static/boxcnuyc4oa7YqA5owCJg4EgRUf.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/14302f79.png"></p>
 <p>span 的数据结构是<strong>mspan</strong>，span 存储的大小规格覆盖了<strong>小于等于 32K 的 66 种大小，对应编号是 1-66</strong>，记录在<strong>mspan</strong>的<strong>spanclass</strong>中，大于 32K 的记录编号为 0，直接在 mheap 中分配，所以一共 67 种</p>
 <p>除此之外，还会按<strong>存储元素是否含有指针</strong>来分类，也存在 spancalss 中，所以分两种（scan 和 no-scan），一共 134 种</p>
 <p>类型元数据的<strong>_type</strong>的<strong>ptrdata</strong>就是用于<strong>区分需要放在 scan 还是 no-scan 中</strong>，ptrdata&#x3D;0 的会放在 no-scan 中，<strong>即使是指针类型也不会被 gc 扫描</strong>，ptrdata 不为 0 的会分配到 scan 中，会被 gc 扫描。</p>
@@ -470,7 +470,7 @@
 <p>go 实现了<strong>全局和本地 span 缓存</strong>，防止每次进行堆空间分配的时候都要去申请一次</p>
 <p>mheap.central 记录了 span 的全局缓存，每一个 mcentral 代表了一种 spanclass。并且将有空闲空间 empty，没空闲空间 nonempty 分别管理</p>
 <p>每个 P 都有一个 mcache 用于本地缓存，一样用 spanclass 区分，共 134 个 mspan 链表</p>
-<p><img src="/static/boxcnRD8TggYYzaVNvvoOXmkYYg.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/a66449b4.png"></p>
 <p>总结：</p>
 <p>Go 的内存分配器在分配对象时，根据对象的大小，分成三类：小对象（小于等于 16B）、一般对象（大于 16B，小于等于 32KB）、大对象（大于 32KB）。</p>
 <p>大体上的分配流程：</p>
@@ -484,27 +484,27 @@
 </ol>
 <h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><p>runtime 将堆地址空间定义为一个一个 arena，在 amd64 的 Linux 环境下，每个 arena 占 64MB，起始地址也对齐了 64MB。每个 arena 包含了 8192 个 page（8K）。</p>
 <p>内存分配采用了与 Tcmalloc 类似的内存分配器，按照一组预置的大小规格把内存页划分为块，然后将不同规格内存块放入空闲链表中。一共 67 种（go1.16）最小 8 字节，最大 32K，即 span</p>
-<p><img src="/static/boxcn5zyv336hYtsn4IIBR7OWLg.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/41b455a8.png"></p>
 <p>mheap 中有一个全局管理中心，是一个长度为 132 的数组，元素是 mcentral 结构加上 padding，一个 mcentral 对应一种 mspan</p>
-<p><img src="/static/boxcnUsHBIWGHoYqACmqNW1N68b.png"></p>
-<p><img src="/static/boxcnfWAMg5V5bJ7zQ5xw4jpwEY.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/2b152033.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/f40ddf2d.png"></p>
 <h2 id="mallocgc"><a href="#mallocgc" class="headerlink" title="mallocgc"></a>mallocgc</h2><h3 id="辅助-gc"><a href="#辅助-gc" class="headerlink" title="辅助 gc"></a>辅助 gc</h3><p>申请一字节内存空间需要做多少扫描工作，或者完成一次扫描后能分配多大空间，都需要 gc 实时处理</p>
 <p>每次辅助 gc 都要扫描 64K，g 每次执行辅助 gc，多出来的部分都会作为信用存储到当前 g 中，后续再执行时只要额度用不完就不用辅助 gc。还有另一种可以避免辅助 gc 的方式：后台的 mark worker 会在全局 gcController（bgScanCredit）处积累信用，如果能够从这里窃取到足够的信用来抵消负债的信用 gcAssistBytes，那么也不会执行辅助 gc</p>
 <h3 id="空间分配"><a href="#空间分配" class="headerlink" title="空间分配"></a>空间分配</h3><p>根据分配空间大小与是否为 no-scan 类型来选择不同的分配策略。</p>
-<p><img src="/static/boxcnUuOJLdaNuYFp6kOYKySWld.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/28384df3.png"></p>
 <p>如果超过 32K，会直接根据需要 page 数来直接分配一个 span。小于 16B 时为了不浪费，tiny allocator 将几个小块的内存分配请求合并，能提高内存使用率。tiny cache 的分配在 mcache 中，维护了一个 tiny cache16B，和一个 offset，如果经过内存对齐后不满足，则从 mspan 中拿多一个 16B 的过来，分配完成后，如果空闲空间比之前那个 tiny cache 大，则替换掉他。</p>
 <h3 id="位图标记"><a href="#位图标记" class="headerlink" title="位图标记"></a>位图标记</h3><blockquote>
 <p>通过一个特定的堆内存地址如何找到对应的 heapArena 和 mspan</p>
 </blockquote>
 <p>heapArena 的地址存到了一个二维数组里，寻址时要根据 arena 编号计算出一个 arenaIdx，是个 uint。分为两部分作为两个维度的索引</p>
-<p><img src="/static/boxcn1ROSfHcHa6hwKki8cEqRo1.png"></p>
-<p><img src="/static/boxcnLveVrbYSa4Y9h1yfXzn9BM.png"></p>
-<h3 id="收尾工作"><a href="#收尾工作" class="headerlink" title="收尾工作"></a>收尾工作</h3><p><img src="/static/boxcnGUBcTSE8PQf416PiVHiLto.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/83512dd1.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/9baa0bb9.png"></p>
+<h3 id="收尾工作"><a href="#收尾工作" class="headerlink" title="收尾工作"></a>收尾工作</h3><p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/592169b4.png"></p>
 <h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><p>mspan 分配给堆和栈，不过 span 的状态不同：分配给堆是 mSpanInUse，分配给栈是 mSpanManual。调度器初始化的时候会初始化两个用于栈分配的全局缓存对象：一个是<strong>stackpool</strong>，是一个 span 链表的数组，面向 32KB 以下的栈分配，分配的内存必须是 2 的幂，Linux 环境下划分为 2K、4K、8K、16K 4 个空闲链表。另一个是<strong>stackLarge</strong>，分配大于等于 32KB 的栈，也是一个 span 链表的数组，长度为 25，规格从 8K 开始，<strong>后面都是前一个的 2 倍</strong>。8 与 16K 一直是空的，是为了使用 mspan 包含页面数的（以 2 为底）对数作为数组的下标</p>
 <p>每个 P 也有用于栈分配的本地缓存，与 stackpool 差不多。</p>
-<p><img src="/static/boxcnc99Ng5fc9aqeZCqoRMudfd.png"></p>
-<p><img src="/static/boxcnqNWJcsOJdsZ89JXQAc0aHd.png"></p>
-<p><img src="/static/boxcnQSV0n8lnRN408VbFiLwmPg.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/82f68307.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/e2f31396.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/7ab706e0.png"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="什么时候会触发-golang-GC-呢"><a href="#什么时候会触发-golang-GC-呢" class="headerlink" title="什么时候会触发 golang GC 呢"></a>什么时候会触发 golang GC 呢</h3><ol>
 <li>执行 runtime.gc()</li>
 <li>监控线程 runtime.sysmon 定时调用；</li>
