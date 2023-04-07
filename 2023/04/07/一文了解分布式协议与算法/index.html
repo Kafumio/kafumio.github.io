@@ -1,0 +1,862 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>一文了解分布式协议与算法 | 夜航船</title><meta name="author" content="夜航船"><meta name="copyright" content="夜航船"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="分布式协议与算法分布式故障  拜占庭将军问题 什么是拜占庭将军问题  「拜占庭将军问题」来源于这样一个场景：拜占庭帝国的军队正在围攻一座城市。这支军队被分成了多支小分队，驻扎在城市周围的不同方位，每支小分队由一个将军领导。这些将军们彼此之间只能依靠信使传递消息（无法聚在一起开个会）。每个将军在观察自己方位的敌情以后，会给出一个各自的行动建议（比如进攻、撤退或按兵不动），但最终的需要将军们达成一致的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文了解分布式协议与算法">
+<meta property="og:url" content="https://kafumio.github.io/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="夜航船">
+<meta property="og:description" content="分布式协议与算法分布式故障  拜占庭将军问题 什么是拜占庭将军问题  「拜占庭将军问题」来源于这样一个场景：拜占庭帝国的军队正在围攻一座城市。这支军队被分成了多支小分队，驻扎在城市周围的不同方位，每支小分队由一个将军领导。这些将军们彼此之间只能依靠信使传递消息（无法聚在一起开个会）。每个将军在观察自己方位的敌情以后，会给出一个各自的行动建议（比如进攻、撤退或按兵不动），但最终的需要将军们达成一致的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/cover.jpg">
+<meta property="article:published_time" content="2023-04-07T14:20:34.000Z">
+<meta property="article:modified_time" content="2023-04-07T14:39:45.021Z">
+<meta property="article:author" content="夜航船">
+<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="协议">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/cover.jpg"><link rel="shortcut icon" href="https://s2.loli.net/2023/04/02/aNKnQqDzrlswO8e.png"><link rel="canonical" href="https://kafumio.github.io/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一文了解分布式协议与算法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-07 22:39:45'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/avatar1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/cover.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="夜航船"><span class="site-name">夜航船</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">一文了解分布式协议与算法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-07T14:20:34.000Z" title="发表于 2023-04-07 22:20:34">2023-04-07</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-07T14:39:45.021Z" title="更新于 2023-04-07 22:39:45">2023-04-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%80%E6%96%87%E7%B3%BB%E5%88%97/">一文系列</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">16.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>49分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="一文了解分布式协议与算法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/#post-comment"><span class="gitalk-comment-count"><i class="fa-solid fa-spinner fa-spin"></i></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="分布式协议与算法"><a href="#分布式协议与算法" class="headerlink" title="分布式协议与算法"></a>分布式协议与算法</h1><h2 id="分布式故障"><a href="#分布式故障" class="headerlink" title="分布式故障"></a>分布式故障</h2><p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/ab2aeb8c.png"></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/T281b3t0loKrRKxHLGqcGKwunXg.png"></p>
+<h3 id="拜占庭将军问题"><a href="#拜占庭将军问题" class="headerlink" title="拜占庭将军问题"></a>拜占庭将军问题</h3><ul>
+<li><p>什么是拜占庭将军问题</p>
+<ul>
+<li>「拜占庭将军问题」来源于这样一个场景：拜占庭帝国的军队正在围攻一座城市。这支军队被分成了多支小分队，驻扎在城市周围的不同方位，每支小分队由一个将军领导。这些将军们彼此之间只能依靠信使传递消息（无法聚在一起开个会）。每个将军在观察自己方位的敌情以后，会给出一个各自的行动建议（比如进攻、撤退或按兵不动），但最终的需要将军们达成一致的作战计划并共同执行，否则就会被敌人各个击破。但是，这些将军中可能有叛徒，他们会尝试阻止其他忠诚的将军达成一致的作战计划。</li>
+<li>这就是拜占庭将军的「问题」：只能依靠通信相互交流，又不知道谁是叛徒，怎么能不受叛徒们的影响，让这些忠诚的将军快速的达到一致的作战计划呢？</li>
+<li>类比到计算机系统就是如下情景：在一个分布式系统中，针对每个运算，每台独立的机器也需要最终达成一致的结果。但每个计算机节点之间也只能依靠网络通信（显然它们无法聚在一起开会），每个计算机节点都有出错的可能（被攻击，或故障），从而变成「叛徒」干扰正常的计算机达成一致。</li>
+</ul>
+</li>
+<li><p>两将军问题</p>
+<ul>
+<li>背景：两支军队的将军只能派信使穿越敌方领土进行通信，来约定进攻时间。这个问题希望求解如何在两名将军派出的任何信使都可能被俘获的情况下，就进攻时间达成共识。</li>
+<li>结论：两支军队理论上永远无法达成共识。达成共识与消息传递不同，即使保证了消息传递成功，也不能够保证达成共识：当将军 A 发 9 点进攻，将军 B 收到了，回复收到，此时消息被捕获了，那么将军 B 将会在 9 点进攻，而将军 A 会因为没有收到回复而不发起进攻。</li>
+<li>有点类似 TCP 三次握手，三次握手是在两个方向确认包的序列号，来增加超时重试，是两将军问题的一个工程解。</li>
+</ul>
+</li>
+<li><p>三将军问题</p>
+<ul>
+<li><p>背景：三个将军共同协商进攻或者撤退，并让信使传递信息，按照 “少数服从多数” 的原则投票表决，则两个人意见一致即可。</p>
+</li>
+<li><p>根本难题：“两忠一叛” 即在三将军中存在一个叛徒，他会通过发送误导信息，来干扰总体的进攻计划，导致进攻计划不一致，可能会被逐个击破。</p>
+</li>
+<li><p>解决方法：</p>
+<ul>
+<li><p>口信消息型拜占庭问题之解</p>
+<ul>
+<li>内容：如果叛将人数为 m，将军人数不能少于 3m + 1 ，那么拜占庭将军问题就能解决了。</li>
+<li>局限性：如果叛将人数为 m，那么将军总人数必须不小于 3m + 1。</li>
+</ul>
+</li>
+<li><p>签名消息型拜占庭问题之解</p>
+<ul>
+<li><p>内容：通过具有以下特性的签名消息约束叛将行为，使任何叛变行为都会被发现：</p>
+<ul>
+<li>忠诚将军的签名无法伪造，而且对他签名消息的内容进行任何更改都会被发现</li>
+<li>任何人都能验证将军签名的真伪</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>结论</p>
+<ul>
+<li>拜占庭将军问题描述的是最困难的，也是最复杂的一种分布式故障场景，除了存在故障行为，还存在恶意行为的一个场景。你要注意，在存在恶意节点行为的场景中（比如在数字货币的区块链技术中），必须使用拜占庭容错算法（Byzantine Fault Tolerance，BFT）。除了故事中提到两种算法，常用的拜占庭容错算法还有：PBFT 算法，PoW 算法（为了重点突出，这些内容我会在后面讲解）。</li>
+<li>而在计算机分布式系统中，最常用的是非拜占庭容错算法，即故障容错算法（Crash Fault Tolerance，CFT）。<strong>CFT 解决的是分布式的系统中存在故障，但不存在恶意节点的场景下的共识问题。</strong> 也就是说，这个场景可能会丢失消息，或者有消息重复，但不存在错误消息，或者伪造消息的情况。常见的算法有 Paxos 算法、Raft 算法、ZAB 协议（这些内容我同样会在后面讲解）。</li>
+<li>如果能确定该环境中各节点是可信赖的，不存在篡改消息或者伪造消息等恶意行为（例如 DevOps 环境中的分布式路由寻址系统），推荐使用非拜占庭容错算法；反之，推荐使用拜占庭容错算法，例如在区块链中使用 PoW 算法。</li>
+</ul>
+</li>
+</ul>
+<h2 id="理论基础"><a href="#理论基础" class="headerlink" title="理论基础"></a>理论基础</h2><h3 id="CAP-理论"><a href="#CAP-理论" class="headerlink" title="CAP 理论"></a>CAP 理论</h3><ul>
+<li><p>CAP 三指标</p>
+<ul>
+<li>C 一致性（Consistency）：指数据在多个副本之间能够保持一致的特征（严格一致性），客户端每次读操作不管访问哪个节点，要么读到的都是同一份数据，要么读取失败。</li>
+<li>A 可用性（Availability）：指系统提供的服务必须一直处于可用的状态，每次请求都能获取到非错的响应，但是不保证获取的数据是最新数据。指服务可用，但不保证数据的一致。</li>
+<li>P 分区容错性（Network partitioning）：分布式系统在遇到任何网络分区故障时，仍然能够对外提供满足一致性和可用性的服务，除非整个网络环境都发生了故障。强调集群对分区故障的容错能力。</li>
+</ul>
+</li>
+<li><p>CAP 不可能三角</p>
+</li>
+</ul>
+<p>对于一个分布式系统而言，一致性、可用性、分区容错性 3 个指标不可兼得，只能在其中选择两个。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/NSnEbRVUGoIM0cxhtBbcISgnnsh.png"></p>
+<ul>
+<li><p>如何使用 CAP 理论</p>
+<ul>
+<li><p>分区容错一致性模型</p>
+<ul>
+<li>CA 模型：放弃分区容错性，加强一致性和可用性，在分布式系统中不存在，一般是传统单机数据库的选择。</li>
+<li>AP 模型：放弃一致性（指强一致性），追求分区容错性和可用性，实现了服务的高可用。用户访问系统的时候，都能得到响应数据，不会出现响应错误，但当出现分区故障时，相同的读操作，访问不同的节点，得到响应数据可能不一样。典型应用就比如 Cassandra 和 DynamoDB。</li>
+<li>CP 模型：放弃可用性，追求一致性和分区容错性。一旦因为消息丢失、延迟过高发生了网络分区，就影响用户的体验和业务的可用性。因为为了防止数据不一致，集群将拒绝新数据的写入，典型的应用是 ZooKeeper，Etcd 和 HBase。</li>
+</ul>
+</li>
+<li><p>CAP 理论像 PH 试纸一样，可以用来度量分布式系统的酸碱值，帮助我们思考如何设计合适的酸碱度，在一致性和可用性之间进行妥协折中，设计出满足场景特点的分布式系统。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="ACID-理论"><a href="#ACID-理论" class="headerlink" title="ACID 理论"></a>ACID 理论</h3><p>追求一致性 <a target="_blank" rel="noopener" href="https://anyview.fun/2023/01/04/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8B%E5%8A%A1/">一文了解事务</a></p>
+<h3 id="BASE-理论"><a href="#BASE-理论" class="headerlink" title="BASE 理论"></a>BASE 理论</h3><p>CAP 理论中 AP 的延伸，是对互联网大规模分布式系统的实践总结，强调可用性。</p>
+<p>它的核心就是<strong>Basically Available（基本可用性）</strong>和 <strong>Eventually consistent（最终一致性）</strong>，而 Soft state（软状态）为一种过渡状态。</p>
+<ul>
+<li>Basically Available（基本可用）：假设系统出现了不可预知的故障，但还是要保证能用，相对于正常的系统而言，响应时间上的损失或功能上的损失。</li>
+<li>Soft state（软状态）：允许系统中的数据存在中间状态，并认为该状态不影响系统的整体可用性，即允许系统在多个不同节点的数据副本存在数据延时。</li>
+<li>Eventually consistent（最终一致性）：系统能够保证在没有其他新的更新操作下，数据最终一定能够达到一致的状态，因此所有客户端对系统的数据访问最终都能获取到最新的值。</li>
+</ul>
+<h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>CP 相关</p>
+<p>兰伯特时钟</p>
+<h3 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h3><p>基于三个假设：</p>
+<ol>
+<li>引入协调者（Coordinator）和参与者（Participants），互相进行网络通信</li>
+<li>所有节点都采用预写日志，且日志被写入后保存在可靠的存储设备上</li>
+<li>所有节点不会永久性损坏，即使损坏后仍然可以恢复</li>
+</ol>
+<p>可能发生的故障：</p>
+<ol>
+<li>协调者不宕机，参与者宕机。进行回滚</li>
+<li>协调者宕机，参与者不宕机。需要新起一个协调者，待查询状态后重复两阶段提交</li>
+<li>协调者宕机和参与者宕机。很难确定状态，需要数据库管理员介入。</li>
+</ol>
+<p>两阶段提交会有性能问题（多次网络通信）、协调者单点故障问题（当协调者宕机，处于事务状态的参与者无法继续事务）、网络分区导致数据不一致问题（Commit 对多个节点作用的结果不一致）。</p>
+<h3 id="TCC（Try-Confirm-Cancel）"><a href="#TCC（Try-Confirm-Cancel）" class="headerlink" title="TCC（Try-Confirm-Cancel） "></a><strong>TCC（Try-Confirm-Cancel） </strong></h3><p>TCC 是 Try（预留）、Confirm（确认）、Cancel（撤销） 3 个操作的简称，它包含了预留、确认或撤销这 2 个阶段。</p>
+<p>TCC 本质上是补偿事务，<strong>它的核心思想是针对每个操作都要注册一个与其对应的确认操作和补偿操作（也就是撤销操作）。</strong></p>
+<h3 id="三阶段提交"><a href="#三阶段提交" class="headerlink" title="三阶段提交"></a>三阶段提交</h3><p>将两阶段提交的 Prepare 阶段拆分成 CanCommit 和 PreCommit 机制。解决了单点故障问题和阻塞问题。</p>
+<p>避免了资源浪费，多写入一条日志。另外还引入了超时机制，在等待超时之后会继续事务的提交。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/DikbbmJGtoIFwQxn73CcZp4Bnde.png"></p>
+<blockquote>
+<p>性能问题</p>
+</blockquote>
+<p>需要多次网络交互</p>
+<blockquote>
+<p>网络分区带来的一致性问题</p>
+</blockquote>
+<p>上锁</p>
+<h2 id="协议与算法"><a href="#协议与算法" class="headerlink" title="协议与算法"></a>协议与算法</h2><h3 id="Paxos-算法"><a href="#Paxos-算法" class="headerlink" title="Paxos 算法"></a>Paxos 算法</h3><p>兰伯特提出的 Paxos 算法包含 2 个部分：</p>
+<ul>
+<li><strong>Basic Paxos 算法</strong>，描述的是多节点之间如何就某个值（提案 Value）达成共识</li>
+<li><strong>Multi-Paxos 思想</strong>，描述的是执行多个 Basic Paxos 实例，就一系列值达成共识</li>
+</ul>
+<h4 id="Basic-Paxos"><a href="#Basic-Paxos" class="headerlink" title="Basic Paxos"></a>Basic Paxos</h4><p>Basic Paxos 是 Multi-Paxos 思想的核心，说白了，Multi-Paxos 就是多执行几次 Basic Paxos。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/NudVbntkno1jmuxukcfcV6YDnEg.png"></p>
+<p>当有多个客户端（比如客户端 1、2）访问这个系统，试图创建同一个只读变量（比如 X），客户端 1 试图创建值为 3 的 X，客户端 2 试图创建值为 7 的 X，这样要如何达成共识，实现各节点上 X 值的一致呢？</p>
+<p>为了帮助人们更好地理解 Basic Paxos 算法，兰伯特在讲解时，也使用了一些独有而且比较重要的概念，提案、准备（Prepare）请求、接受（Accept）请求、角色等等，其中最重要的就是“角色”。因为角色是对 Basic Paxos 中最核心的三个功能的抽象，比如，由接受者（Acceptor）对提议的值进行投票，并存储接受的值。</p>
+<ul>
+<li>三种角色</li>
+</ul>
+<p>在 Basic Paxos 中，有<strong>提议者（Proposer）、接受者（Acceptor）、学习者（Learner）</strong>三种角色，他们之间的关系如下：</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/BaZsbpDOMoSZLlxDRr5cZKyxndc.png"></p>
+<p><strong>提议者（Proposer）</strong>：提议一个值，用于投票表决。为了方便演示，你可以把图 1 中的客户端 1 和 2 看作是提议者。但在绝大多数场景中，集群中收到客户端请求的节点，才是提议者（图 1 这个架构，是为了方便演示算法原理）。这样做的好处是，对业务代码没有入侵性，也就是说，我们不需要在业务代码中实现算法逻辑，就可以像使用数据库一样访问后端的数据。</p>
+<p><strong>接受者（Acceptor）</strong>：对每个提议的值进行投票，并存储接受的值，比如 A、B、C 三个节点。 一般来说，集群中的所有节点都在扮演接受者的角色，参与共识协商，并接受和存储数据。</p>
+<p>讲到这儿，你可能会有疑惑：前面不是说接收客户端请求的节点是提议者吗？这里怎么又是接受者呢？这是因为一个节点（或进程）可以身兼多个角色。想象一下，一个 3 节点的集群，1 个节点收到了请求，那么该节点将作为提议者发起二阶段提交，然后这个节点和另外 2 个节点一起作为接受者进行共识协商，就像下图的样子：</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/F50kboxL5ot9U4xFj28ckaAcnSd.png"></p>
+<p><strong>学习者（Learner）</strong>：被告知投票的结果，接受达成共识的值，存储保存，不参与投票的过程。一般来说，学习者是数据备份节点，比如“Master-Slave”模型中的 Slave，被动地接受数据，容灾备份。</p>
+<p>其实，这三种角色，在本质上代表的是三种功能：</p>
+<ul>
+<li>提议者代表的是接入和协调功能，收到客户端请求后，发起二阶段提交，进行共识协商；</li>
+<li>接受者代表投票协商和存储数据，对提议的值进行投票，并接受达成共识的值，存储保存；</li>
+<li>学习者代表存储数据，不参与共识协商，只接受达成共识的值，存储保存。</li>
+</ul>
+<p>因为一个完整的算法过程是由这三种角色对应的功能组成的，所以理解这三种角色，是你理解 Basic Paxos 如何就提议的值达成共识的基础。</p>
+<ul>
+<li><p>如何达成共识</p>
+<ul>
+<li>Basic Paxos 是通过二阶段提交的方式来达成共识的。二阶段提交是达成共识的常用方式，如果你需要设计新的共识算法的时候，也可以考虑这个方式。</li>
+<li>除了共识，Basic Paxos 还实现了容错，在少于一半的节点出现故障时，集群也能工作。它不像分布式事务算法那样，必须要所有节点都同意后才提交操作，因为“所有节点都同意”这个原则，在出现节点故障的时候会导致整个集群不可用。也就是说，“大多数节点都同意”的原则，赋予了 Basic Paxos 容错的能力，让它能够容忍少于一半的节点 的故障。</li>
+<li>本质上而言，提案编号的大小代表着优先级，你可以这么理解，根据提案编号的大小，接受者保证<strong>三个承诺</strong>，具体来说：如果准备请求的提案编号，<strong>小于等于</strong>接受者已经响应的准备请求的提案编号，那么接受者将承诺不响应这个准备请求；如果接受请求中的提案的提案编号，<strong>小于</strong>接受者已经响应的准备请求的提案编号，那么接受者将承诺不通过 这个提案；如果接受者之前有通过提案，那么接受者将承诺，会在准备请求的响应中，包含<strong>已经通过的最大编号的提案信息</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="Multi-Paxos"><a href="#Multi-Paxos" class="headerlink" title="Multi-Paxos"></a>Multi-Paxos</h4><p><strong>兰伯特提到的 Multi-Paxos 是一种思想，不是算法。而 Multi-Paxos 算法是一个统称，它是指基于 Multi-Paxos 思想，通过多个 Basic Paxos 实例实现一系列值的共识的算法（比如 Chubby 的 Multi-Paxos 实现、Raft 算法等）。 </strong></p>
+<ul>
+<li><p>如何解决 Basic Paxos 的痛点</p>
+<ul>
+<li><p>Basic Paxos 只能就单个值（Value）达成共识，一旦遇到为一系列的值实现共识的时候，它就不管用了。</p>
+</li>
+<li><p>如果直接通过多次执行 Basic Paxos 实例，来实现一系列共识，会出现以下问题：</p>
+<ul>
+<li>如果多个提议者同时提交提案，可能出现因为提案冲突，在准备阶段没有提议者接收到大多数准备响应，协商失败，需要重新协商。</li>
+<li>2 轮 RPC 通讯（准备阶段和接受阶段）往返消息多、耗性能、延迟大。</li>
+</ul>
+</li>
+<li><p>解决以上两个问题的方法</p>
+<ul>
+<li><p>引入领导者</p>
+<ul>
+<li>我们可以通过引入领导者节点，也就是说，领导者节点作为唯一提议者，这样就不存在多个提议者同时提交提案的情况，也就不存在提案冲突的情况了：</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/OBvObZGPZopUlYx69iAcvmFKnjw.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  - &lt;strong&gt;在论文中，兰伯特没有说如何选举领导者，需要我们在实现 Multi Paxos 算法的时候自己实现。&lt;/strong&gt; 比如在 Chubby 中，主节点（也就是领导者节点）是通过执行 Basic Paxos 算法，进行投票选举产生的。</span><br><span class="line"></span><br><span class="line">- 优化 Basic Paxos 执行</span><br><span class="line"></span><br><span class="line">  - 我们可以采用“当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”这个优化机制，优化 Basic Paxos 执行。也就是说，领导者节点上，序列中的命令是最新的，不再需要通过准备请求来发现之前被大多数节点通过的提案，领导者可以独立指定提案中的值。这时，领导者在提交命令时，可以省掉准备阶段，直接进入到接受阶段： </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/JWmVb0IeVoWbOjx07N7cQeOFn7m.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 和重复执行 Basic Paxos 相比，Multi-Paxos 引入领导者节点之后，因为只有领导者节点一个提议者，只有它说了算，所以就不存在提案冲突。另外，当主节点处于稳定状态时，就省掉准备阶段，直接进入接受阶段，所以在很大程度上减少了往返的消息数，提升了性能，降低了延迟。 </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Chubby 的 Multi-Paxos 实现</p>
+<ul>
+<li>首先，它通过引入主节点，实现了兰伯特提到的领导者（Leader）节点的特性。也就是说，主节点作为唯一提议者，这样就不存在多个提议者同时提交提案的情况，也就不存在提案冲突的情况了。</li>
+<li>另外，在 Chubby 中，主节点是通过执行 Basic Paxos 算法，进行投票选举产生的，并且在运行过程中，主节点会通过不断续租的方式来延长租期（Lease）。比如在实际场景中，几天内都是同一个节点作为主节点。如果主节点故障了，那么其他的节点又会投票选举出新的主节点，也就是说主节点是一直存在的，而且是唯一的。 其次，在 Chubby 中实现了兰伯特提到的，“当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”这个优化机制。</li>
+<li>最后，在 Chubby 中，实现了成员变更（Group membership），以此保证节点变更的时候集群的平稳运行。</li>
+<li>最后，我想补充一点：<strong>在 Chubby 中，为了实现了强一致性，读操作也只能在主节点上执行。</strong> 也就是说，只要数据写入成功，之后所有的客户端读到的数据都是一致的。</li>
+</ul>
+</li>
+<li><p>重点注意</p>
+<ul>
+<li>兰伯特提到的 Multi-Paxos 是一种思想，不是算法，而且还缺少算法过程的细节和编程所必须的细节，比如如何选举领导者等，这也就导致了每个人实现的 Multi-Paxos 都不一样。而 Multi-Paxos 算法是一个统称，它是指基于 Multi-Paxos 思想，通过多个 Basic Paxos 实例实现一系列数据的共识的算法（比如 Chubby 的 Multi-Paxos 实现、Raft 算法等）。</li>
+<li>Chubby 实现了主节点（也就是兰伯特提到的领导者），也实现了兰伯特提到的 <strong>“当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”</strong> 这个优化机制，省掉 Basic Paxos 的准备阶段，提升了数据的提交效率，但是所有写请求都在主节点处理，限制了集群处理写请求的并发能力，约等于单机。</li>
+<li>因为在 Chubby 的 Multi-Paxos 实现中，也约定了“大多数原则”，也就是说，只要大多数节点正常运行时，集群就能正常工作，所以 Chubby 能容错（n - 1）&#x2F;2 个节点的故障。</li>
+<li>本质上而言，“当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”这个优化机制，是通过减少非必须的协商步骤来提升性能的。这种方法非常常用，也很有效。比如，Google 设计的 QUIC 协议，是通过减少 TCP、TLS 的协商步骤，优化 HTTPS 性能。<strong>我希望你能掌握这种性能优化思路，后续在需要时，可以通过减少非必须的步骤，优化系统性能。</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="Raft-算法"><a href="#Raft-算法" class="headerlink" title="Raft 算法"></a>Raft 算法</h3><p>Raft 算法属于 Multi-Paxos 算法，它是在兰伯特 Multi-Paxos 思想的基础上，做了一些简化和限制，比如增加了日志必须是连续的，只支持领导者、跟随者和候选人三种状态，在理解和算法实现上都相对容易许多。</p>
+<p><strong>除此之外，Raft 算法是现在分布式系统开发首选的共识算法。</strong></p>
+<p><strong>如果要用一句话概括 Raft 算法，我觉得是这样的：从本质上说，Raft 算法是通过一切以领导者为准的方式，实现一系列值的共识和各节点日志的一致。</strong></p>
+<ul>
+<li><p>如何选举领导者</p>
+<ul>
+<li>成员身份</li>
+</ul>
+</li>
+</ul>
+<p>成员身份，又叫做服务器节点状态，<strong>Raft 算法支持领导者（Leader）、跟随者（Follower）和候选人（Candidate） 3 种状态。</strong></p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/ZdjtbbFD4ox4NHxbPVhcRJirnBb.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- 跟随者：接收和处理来自领导者的消息，当等待领导者心跳信息超时的时候，就主动站出来，推荐自己当候选人。 </span><br><span class="line"></span><br><span class="line">- 候选人：候选人将向其他节点发送请求投票（RequestVote）RPC 消息，通知其他节点来投票，如果赢得了大多数选票，就晋升当领导者。 </span><br><span class="line"></span><br><span class="line">- 领导者：主要工作内容是 3 部分，处理写请求、管理日志复制和不断地发送心跳信息，通知其他节点“我是领导者，我还活着，你们现在不要发起新的选举，找个新领导者来替代我。”</span><br></pre></td></tr></table></figure>
+
+<p><strong>Raft 算法是强领导者模型，集群中只能有一个领导者。</strong></p>
+<ul>
+<li>选举领导者的过程</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/GyPQbVROPoMCzVxZ7i4cL7hlnph.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- 首先，在初始状态下，集群中所有的节点都是跟随者的状态。</span><br><span class="line"></span><br><span class="line">- Raft 算法实现了随机超时时间的特性，每个节点的等待超时时间间隔是随机的，而图上 A 会最先超时，然后 A 就增加自己的任期编号 1 ，并推举自己为候选人，先给自己投上一张选票，然后向其他节点发送请求投票 RPC 消息，请它们选举自己为领导者。</span><br><span class="line"></span><br><span class="line">- 如果其他节点接收到候选人 A 的请求投票 RPC 消息，在编号为 1 的这届任期内，也还没有进行过投票，那么它将把选票投给节点 A，并增加自己的任期编号。</span><br><span class="line"></span><br><span class="line">- 如果候选人在选举超时时间内赢得了大多数的选票，那么它就会成为本届任期内新的领导者。</span><br><span class="line"></span><br><span class="line">- 节点 A 当选领导者后，他将周期性地发送心跳消息，通知其他服务器我是领导者，阻止跟随者发起新的选举，篡权。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>选举过程四要点</p>
+<ul>
+<li>节点间如何通讯</li>
+</ul>
+</li>
+</ul>
+<p>在 Raft 算法中，服务器节点间的沟通联络采用的是<strong>远程过程调用（RPC）</strong>，在领导者选举中，需要用到这样两类的 RPC：</p>
+<ol>
+<li><strong>请求投票（RequestVote）RPC</strong>，是由候选人在选举期间发起，通知各节点进行投票；</li>
+<li><strong>日志复制（AppendEntries）RPC</strong>，是由领导者发起，用来复制日志和提供心跳消息。</li>
+</ol>
+<p><strong>日志复制 RPC 只能由领导者发起，这是实现强领导者模型的关键之一</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- 什么是任期</span><br><span class="line"></span><br><span class="line">  - Raft 算法中的领导者是有任期的，每个任期由单调递增的数字（任期编号）标识，比如节点 A 的任期编号是 1。&lt;strong&gt;任期编号是随着选举的举行而变化的。&lt;/strong&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>跟随者在等待领导者心跳信息超时后，推举自己为候选人时，会增加自己的任期号，比如节点 A 的当前任期编号为 0，那么在推举自己为候选人时，会将自己的任期编号增加为 1。</li>
+<li>如果一个服务器节点，发现自己的任期编号比其他节点小，那么它会更新自己的编号到较大的编号值。比如节点 B 的任期编号是 0，当收到来自节点 A 的请求投票 RPC 消息时，因为消息中包含了节点 A 的任期编号，且编号为 1，那么节点 B 将把自己的任期编号更新为 1。</li>
+</ol>
+<p><strong>Raft 算法中的任期不只是时间段，而且任期编号的大小，会影响领导者选举和请求的处理。 </strong></p>
+<ol>
+<li><p>在 Raft 算法中约定，如果一个候选人或者领导者，发现自己的任期编号比其他节点小，那么它会立即恢复成跟随者状态。比如分区错误恢复后，任期编号为 3 的领导者节点 B，收到来自新领导者的，包含任期编号为 4 的心跳消息，那么节点 B 将立即恢复成跟随者状态。</p>
+</li>
+<li><p>还约定如果一个节点接收到一个包含较小的任期编号值的请求，那么它会直接拒绝这个请求。比如节点 C 的任期编号为 4，收到包含任期编号为 3 的请求投票 RPC 消息，那么它将拒绝这个消息。</p>
+<ul>
+<li><p>选举有哪些规则</p>
+<ul>
+<li>在 Raft 算法中，约定了选举规则，主要有这样几点：</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>领导者周期性地向所有跟随者发送心跳消息（即不包含日志项的日志复制 RPC 消息），通知大家我是领导者，阻止跟随者发起新的选举。</p>
+</li>
+<li><p>如果在指定时间内，跟随者没有接收到来自领导者的消息，那么它就认为当前没有领导者，推举自己为候选人，发起领导者选举。</p>
+</li>
+<li><p>在一次选举中，赢得大多数选票的候选人，将晋升为领导者。</p>
+</li>
+<li><p>在一个任期内，领导者一直都会是领导者，直到它自身出现问题（比如宕机），或者因为网络延迟，其他节点发起一轮新的选举。</p>
+</li>
+<li><p>在一次选举中，每一个服务器节点最多会对一个任期编号投出一张选票，并且按照“先来先服务”的原则进行投票。比如节点 C 的任期编号为 3，先收到了 1 个包含任期编号为 4 的投票请求（来自节点 A），然后又收到了 1 个包含任期编号为 4 的投票请求（来自节点 B）。那么节点 C 将会把唯一一张选票投给节点 A，当再收到节点 B 的投票请求 RPC 消息时，对于编号为 4 的任期，已没有选票可投了。</p>
+</li>
+</ol>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/MZCFbWx61ovxoCxkU9jcZbsHnef.png"></p>
+<ol>
+<li>当任期编号相同时，日志完整性高的跟随者（也就是最后一条日志项对应的任期编号值更大，索引号更大），拒绝投票给日志完整性低的候选人。比如节点 B、C 的任期编号都是 3，节点 B 的最后一条日志项对应的任期编号为 3，而节点 C 为 2，那么当节点 C 请求节点 B 投票给自己时，节点 B 将拒绝投票。</li>
+</ol>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/OQ4Sbxvf2oBrOUxa97Rcm4EBn4g.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">  - 选举是跟随者发起的，推举自己为候选人；大多数选票是指集群成员半数以上的选票；大多数选票规则的目标，是为了保证在一个给定的任期内最多只有一个领导者。 </span><br><span class="line"></span><br><span class="line">- 如何理解随机超时时间</span><br><span class="line"></span><br><span class="line">  - 如果同一任期内，多个候选人同时发起选举，就会导致选票被瓜分，选举失败。对于这种问题，Raft 算法通过随机超时时间的特性解决。</span><br><span class="line"></span><br><span class="line">  - Raft 算法巧妙地使用随机选举超时时间的方法，把超时时间都分散开来，在大多数 情况下只有一个服务器节点先发起选举，而不是同时发起选举，这样就能减少因选票瓜分导致选举失败的情况。</span><br><span class="line"></span><br><span class="line">  - &lt;strong&gt;在 Raft 算法中，随机超时时间是有 2 种含义的，这里是容易理解出错的地方，需要注意一下： &lt;/strong&gt;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>跟随者等待领导者心跳信息超时的时间间隔，是随机的；</li>
+<li>当没有候选人赢得过半票数，选举无效了，这时需要等待一个随机时间间隔，也就是说，等待选举超时的时间间隔，是随机的。</li>
+</ol>
+<ul>
+<li><p>小结</p>
+<ul>
+<li><p>Raft 算法和兰伯特的 Multi-Paxos 不同之处，主要有 2 点。</p>
+<ul>
+<li>首先，在 Raft 中，不是所有节点都能当选领导者，只有日志最完整的节点，才能当选领导者；其次，在 Raft 中， 日志必须是连续的。</li>
+<li>Raft 算法通过任期、领导者心跳消息、随机选举超时时间、先来先服务的投票原则、大多数选票原则等，保证了一个任期只有一位领导，也极大地减少了选举失败的情况。</li>
+</ul>
+</li>
+<li><p>本质上，Raft 算法以领导者为中心，选举出的领导者，以“一切以我为准”的方式，达成值的共识，和实现各节点日志的一致。</p>
+</li>
+</ul>
+</li>
+<li><p>如何复制日志</p>
+<ul>
+<li>什么是日志</li>
+</ul>
+</li>
+</ul>
+<p>副本数据是以日志的形式存在的，日志是由日志项组成。而日志项是一种数据格式，它主要包含用户指定的数据，也就是指令（Command），还包含一些附加信息，比如索引值（Log index）、任期编号（Term）。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/Jf5db8wLXokF1ZxhOXAccNqqnqg.png"></p>
+<ul>
+<li><p>指令：一条由客户端请求指定的、状态机需要执行的指令。你可以将指令理解成客户端指定的数据。</p>
+</li>
+<li><p>索引值：日志项对应的整数索引值。它其实就是用来标识日志项的，是一个连续的、单调递增的整数号码。</p>
+</li>
+<li><p>任期编号：创建这条日志项的领导者的任期编号。</p>
+<ul>
+<li><p>复制日志的过程</p>
+<ul>
+<li><p>可以把 Raft 的日志复制理解成一个优化后的二阶段提交（将二阶段优化成了一阶段），减少了一半的往返消息，也就是降低了一半的消息延迟。</p>
+</li>
+<li><p>日志复制的具体过程</p>
+<ul>
+<li>首先，领导者进入第一阶段，通过日志复制（AppendEntries）RPC 消息，将日志项复制到集群其他节点上。</li>
+<li>接着，如果领导者接收到大多数的“复制成功”响应后，它将日志项提交到它的状态机，并返回成功给客户端。如果领导者没有接收到大多数的“复制成功”响应，那么就返回错误给客户端。</li>
+</ul>
+</li>
+<li><p>为什么在领导者将日志项提交到它的状态机时，不通知跟随者提交日志项？</p>
+<ul>
+<li>这是 Raft 中的一个优化，领导者不直接发送消息通知其他节点提交指定日志项。因为领导者的日志复制 RPC 消息或心跳消息，包含了当前最大的，将会被提交的日志项索引值。所以通过日志复制 RPC 消息或心跳消息，跟随者就可以知道领导者的日志提交位置信息。</li>
+<li>因此，当其他节点接受领导者的心跳消息，或者新的日志复制 RPC 消息后，就会将这条日志项提交到它的状态机。而这个优化，降低了处理客户端请求的延迟，将二阶段提交优化为了一段提交，降低了一半的消息延迟。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/Ol29bNnlhoqA2vxIlxkcaJ3fnKB.png"></p>
+<ul>
+<li><p>如何实现日志的一致</p>
+<ul>
+<li><p>在 Raft 算法中，领导者通过强制跟随者直接复制自己的日志项，处理不一致日志。也就是说，Raft 是通过以领导者的日志为准，来实现各节点日志的一致的</p>
+</li>
+<li><p>实现日志一致的过程</p>
+<ul>
+<li>首先，领导者通过日志复制 RPC 的一致性检查，找到跟随者节点上，与自己相同日志项的最大索引值。也就是说，这个索引值之前的日志，领导者和跟随者是一致的，之后的日志是不一致的了。</li>
+<li>然后，领导者强制跟随者更新覆盖的不一致日志项，实现日志的一致。</li>
+</ul>
+</li>
+<li><p>具体过程</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>PrevLogEntry：表示当前要复制的日志项，前面一条日志项的索引值。比如在图中，如果领导者将索引值为 8 的日志项发送给跟随者，那么此时 PrevLogEntry 值为 7。</p>
+<p>PrevLogTerm：表示当前要复制的日志项，前面一条日志项的任期编号，比如在图中，如果领导者将索引值为 8 的日志项发送给跟随者，那么此时 PrevLogTerm 值为 4。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/EJfebPEqBoyTmZxiXJCcZjA9nwf.png"></p>
+<ol>
+<li><p>领导者通过日志复制 RPC 消息，发送当前最新日志项到跟随者（为了演示方便，假设当前需要复制的日志项是最新的），这个消息的 PrevLogEntry 值为 7，PrevLogTerm 值为 4。</p>
+</li>
+<li><p>如果跟随者在它的日志中，找不到与 PrevLogEntry 值为 7、PrevLogTerm 值为 4 的日志项，也就是说它的日志和领导者的不一致了，那么跟随者就会拒绝接收新的日志项，并返回失败信息给领导者。</p>
+</li>
+<li><p>这时，领导者会递减要复制的日志项的索引值，并发送新的日志项到跟随者，这个消息的 PrevLogEntry 值为 6，PrevLogTerm 值为 3。</p>
+</li>
+<li><p>如果跟随者在它的日志中，找到了 PrevLogEntry 值为 6、PrevLogTerm 值为 3 的日志项，那么日志复制 RPC 返回成功，这样一来，领导者就知道在 PrevLogEntry 值为 6、PrevLogTerm 值为 3 的位置，跟随者的日志项与自己相同。</p>
+</li>
+<li><p>领导者通过日志复制 RPC，复制并更新覆盖该索引值之后的日志项（也就是不一致的日志项），最终实现了集群各节点日志的一致。</p>
+<ul>
+<li>领导者通过日志复制 RPC 一致性检查，找到跟随者节点上与自己相同日志项的最大索引值，然后复制并更新覆盖该索引值之后的日志项，实现了各节点日志的一致。需要注意的是，跟随者中的不一致日志项会被领导者的日志覆盖，而且领导者从来不会覆盖或者删除自己的日志。</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li><p>小结</p>
+<ul>
+<li>在 Raft 中，副本数据是以日志的形式存在的，其中日志项中的指令表示用户指定的数据。</li>
+<li>兰伯特的 Multi-Paxos 不要求日志是连续的，但在 Raft 中日志必须是连续的。而且在 Raft 中，日志不仅是数据的载体，日志的完整性还影响领导者选举的结果。也就是说，日志完整性最高的节点才能当选领导者。</li>
+<li>Raft 是通过以领导者的日志为准，来实现日志的一致的。</li>
+</ul>
+</li>
+<li><p>如何解决成员变更的问题</p>
+<ul>
+<li><p>成员变更的问题</p>
+<ul>
+<li>Raft 的领导者选举，建立在“大多数”的基础之上，那么当成员变更时，集群成员发生了变化，就可能同时存在新旧配置的 2 个“大多数”，出现 2 个领导者，破坏了 Raft 集群的领导者唯一性，影响了集群的运行。</li>
+</ul>
+</li>
+<li><p>解决成员变更最常用的方法：单节点变更</p>
+<ul>
+<li>单节点变更，就是通过一次变更一个节点实现成员变更。如果需要变更多个节点，那你需要执行多次单节点变更。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/KVD0bsQpaoJGubx4Rbucj2pTnzv.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- 第一步，领导者（节点 A）向新节点（节点 D）同步数据； </span><br><span class="line"></span><br><span class="line">- 第二步，领导者（节点 A）将新配置[A, B, C, D]作为一个日志项，复制到新配置中所有节点（节点 A、B、C、D）上，然后将新配置的日志项提交到本地状态机，完成单节点变更。</span><br><span class="line"></span><br><span class="line">- 每次成员变更都是通过上述过程，一次变更一个节点，保证集群中始终只有一个领导者，而且集群也在稳定运行，持续提供服务。</span><br><span class="line"></span><br><span class="line">- 在正常情况下，&lt;strong&gt;不管旧的集群配置是怎么组成的，旧配置的“大多数”和新配置的“大多数”都会有一个节点是重叠的。&lt;/strong&gt;</span><br><span class="line"></span><br><span class="line">- 需要注意的是，在分区错误、节点故障等情况下，如果我们并发执行单节点变更，那么就可能出现一次单节点变更尚未完成，新的单节点变更又在执行，导致集群出现 2 个领导者的情况。 </span><br><span class="line"></span><br><span class="line">  - 解决方法：可以在领导者启动时，创建一个 NO_OP 日志项（也就是空日志项），只有当领导者将 NO_OP 日志项提交后，再执行成员变更请求。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>小结</p>
+<ul>
+<li>成员变更的问题，主要在于进行成员变更时，可能存在新旧配置的 2 个“大多数”，导致集群中同时出现两个领导者，破坏了 Raft 的领导者的唯一性原则，影响了集群的稳定运行。</li>
+<li>单节点变更是利用“一次变更一个节点，不会同时存在旧配置和新配置 2 个‘大多数’”的特性，实现成员变更。</li>
+<li>因为联合共识实现起来复杂，不好实现，所以绝大多数 Raft 算法的实现，采用的都是单节点变更的方法（比如 Etcd、Hashicorp Raft）。其中，Hashicorp Raft 单节点变更的实现，是由 Raft 算法的作者迭戈·安加罗（Diego Ongaro）设计的，很有参考价值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="一致性哈希算法"><a href="#一致性哈希算法" class="headerlink" title="一致性哈希算法"></a>一致性哈希算法</h3><p>如果我们通过 Raft 算法实现了 KV 存储，虽然领导者模型简化了算法实现和共识协商，但写请求只能限制在领导者节点上处理，导致了集群的接入性能约等于单机，那么随着业务发展，集群的性能可能就扛不住了，会造成系统过载和服务不可用，这时该怎么办呢？答案是，我们需要通过分集群，突破单集群的性能限制。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/NPPBbwXKJoFwe2xZZybcgANDnfb.png"></p>
+<p>我们可以加个 Proxy 层，由 Proxy 层处理来自客户端的读写请求，接收到读写请求后，通过对 Key 做哈希找到对应的集群。</p>
+<p>然而哈希算法有个明显的缺点：当需要变更集群数时（比如从 3 个集群扩展为 4 个集群），这时大部分的数据都需要迁移，重新映射，数据的迁移成本是非常高的。</p>
+<p>那么如何<strong>解决哈希算法，数据迁移成本高</strong>的痛点呢？答案就是<strong>一致性哈希算法（Consistent Hashing）</strong>。</p>
+<ul>
+<li><p>如何使用一致性哈希算法实现哈希寻址</p>
+<ul>
+<li>一致性哈希算法也用了取模运算，但与哈希算法不同的是，哈希算法是对节点的数量进行取模运算，而一致哈希算法是对 2^32 进行取模运算。你可以想象下，一致哈希算法，将整个哈希值空间组织成一个虚拟的圆环，也就是哈希环。</li>
+<li>在一致性哈希算法中，你可以通过执行哈希算法（为了演示方便，假设哈希算法函数为“chash()”），将节点映射到哈希环上，比如选择节点的主机名作为参数执行 c-hash()，那么每个节点就能确定其在哈希环上的位置了。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/NkoObWX2PoRiZ3xiAjicianDnj4.png"></p>
+<ul>
+<li><p>当需要对指定 key 的值进行读写的时候，你可以通过下面 2 步进行寻址：</p>
+<ul>
+<li>首先，将 key 作为参数执行 c-hash() 计算哈希值，并确定此 key 在环上的位置；</li>
+<li>然后，从这个位置沿着哈希环顺时针“行走”，遇到的第一节点就是 key 对应的节点。</li>
+</ul>
+</li>
+<li><p>一致性哈希算法如何避免哈希算法的问题</p>
+<ul>
+<li>在一致哈希算法中，如果增加一个节点，受影响的数据仅仅是，会寻址到新节点和前一节点之间的数据，其它数据也不会受到影响。</li>
+<li>由此，使用了一致哈希算法后，扩容或缩容的时候，都只需要重定位环空间中的一小部分数据，有效降低了迁移成本。<strong>同时，一致哈希算法具有较好的容错性和可扩展性。 </strong></li>
+</ul>
+</li>
+<li><p>一致性哈希算法如何实现负载均衡</p>
+<ul>
+<li>在一致性哈希中，如果节点太少，容易因为节点分布不均匀造成数据访问的冷热不均，也就是说大多数访问请求都会集中少量几个节点上。那有什么办法能让数据访问分布的比较均匀呢？答案就是<strong>虚拟节点</strong>。</li>
+<li>对每一个服务器节点计算多个哈希值，在每个计算结果位置上，都放置若干虚拟节点，并将虚拟节点映射到实际节点。如果有访问请求寻址到虚拟节点，就会被重定位到映射的实际节点。由此，可以解决冷热不均的问题。</li>
+</ul>
+</li>
+</ul>
+<p>当节点数越多的时候，使用哈希算法时，需要迁移的数据就越多，使用一致性哈希算法时，需要迁移的数据就越少。因此，在使用一致性哈希算法实现哈希寻址时，可以通过增加节点数降低节点宕机对整个集群的影响，以及故障恢复时需要迁移的数据量。后续在需要时，你可以通过增加节点数来提升系统的容灾能力和故障恢复效率。</p>
+<ul>
+<li><p>小结</p>
+<ul>
+<li>一致性哈希算法是一种特殊的哈希算法，在使用一致性哈希算法后，节点增减变化时只影响到部分数据的路由寻址，也就是说我们只要迁移部分数据，就能实现集群的稳定了。</li>
+<li>当节点数较少时，可能会出现节点在哈希环上分布不均匀的情况。这样每个节点实际占据环上的区间大小不一，最终导致业务对节点的访问冷热不均。需要你注意的是，这个问题可以通过引入更多的虚拟节点来解决。</li>
+<li>最后我想说的是，一致性哈希算法本质上是一种路由寻址算法，适合简单的路由寻址场景。比如在 KV 存储系统内部，它的特点是简单，不需要维护路由信息。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Gossip-协议"><a href="#Gossip-协议" class="headerlink" title="Gossip 协议"></a><strong>Gossip 协议</strong></h3><p>顾名思义，就像流言蜚语一样，利用一种随机、带有传染性的方式，将信息传播到整个网络中，并在一定时间内，使得系统内的所有节点数据一致。掌握 Gossip 协议不仅能很好地理解这种最常用的，实现最终一致性的算法，也能在后续工作中得心应手地实现数据的最终一致性。</p>
+<ul>
+<li><p>Gossip 三板斧</p>
+<ul>
+<li><p>直接邮寄</p>
+<ul>
+<li>就是直接发送更新数据，当数据发送失败时，将数据缓存下来，然后重传。直接邮寄虽然实现起来比较容易，数据同步也很及时，但可能会因为缓存队列满了而丢数据。也就是说，只采用直接邮寄是无法实现最终一致性的</li>
+</ul>
+</li>
+<li><p>反熵</p>
+<ul>
+<li><p>指的是集群中的节点，每隔段时间就随机选择某个其他节点，然后通过互相交换自己的所有数据来消除两者之间的差异，实现数据的最终一致性。本质上，是一种通过异步修复实现最终一致性的方法。</p>
+</li>
+<li><p><strong>实现反熵，主要有推、拉和推拉三种方式。</strong></p>
+<ul>
+<li>推方式，就是将自己的所有副本数据，推给对方，修复对方副本中的熵。</li>
+<li>拉方式，就是拉取对方的所有副本数据，修复自己副本中的熵。</li>
+<li>推拉方式，就是同时修复自己副本和对方副本中的熵。</li>
+</ul>
+</li>
+<li><p>反熵需要节点两两交换和对比所有的数据，所以执行时通讯成本会很高，所以不建议在实际场景中频繁执行反熵，并且可以通过引入校验和（Checksum）等机制，降低需要对比的数据量和通讯消息等。</p>
+</li>
+<li><p>执行反熵时，相关节点都是已知的，而且节点数量不能太多，如果是一个动态变化或节点数较多的分布式环境（比如在 DevOps 环境中检测节点故障，并动态维护集群节点状态），反熵就不适用了，可以通过谣言传播来保证最终一致性。</p>
+</li>
+</ul>
+</li>
+<li><p>谣言传播</p>
+<ul>
+<li>指的是当一个节点有了新数据后，这个节点变成活跃状态，并周期性地联系其他节点向其发送新数据，直到所有的节点都存储了该新数据。</li>
+<li>谣言传播非常具有传染性，它适合动态变化的分布式系统。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>小结</p>
+<ul>
+<li>作为一种异步修复、实现最终一致性的协议，反熵在存储组件中应用广泛，比如 Dynamo、InfluxDB、Cassandra，需要实现最终一致性时，优先考虑反熵。</li>
+<li>因为谣言传播具有传染性，一个节点传给了另一个节点，另一个节点又将充当传播者，传染给其他节点，所以非常适合动态变化的分布式系统，比如 Cassandra 采用这种方式动态管理集群节点状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Quorum-NWR-算法"><a href="#Quorum-NWR-算法" class="headerlink" title="Quorum NWR 算法"></a><strong>Quorum NWR 算法</strong></h3><p>最终一致性和强一致性的区别</p>
+<ul>
+<li>强一致性能保证写操作完成后，任何后续访问都能读到更新后的值。</li>
+<li>最终一致性只能保证如果对某个对象没有新的写操作了，最终所有后续访问都能读到相同的最近更新的值。也就是说，写操作完成后，后续访问可能会读到旧数据。</li>
+</ul>
+<p>如果想要一套 AP 型的分布式系统的某些业务实现强一致性，要怎么实现呢？总不能重新开发一套系统吧。</p>
+<p>其实，可以用 <strong>Quorum NWR</strong> 解决这个问题。因为通过 Quorum NWR，可以自定义一致性级别，通过临时调整写入或者查询的方式，当 W + R &gt; N 时，就可以实现强一致性了。</p>
+<p>在 AP 型分布式系统中（比如 Dynamo、Cassandra、InfluxDB 企业版的 DATA 节点集群），Quorum NWR 是通常都会实现的一个功能。掌握 Quorum NWR，不仅是掌握一种常用的实现一致性的方法，更重要的是，后续用户可以根据业务的特点，灵活地指定一致性级别。</p>
+<ul>
+<li><p>Quorum NWR 的三要素</p>
+<ul>
+<li>N 表示副本数，又叫做复制因子（Replication Factor）。也就是说，N 表示集群中同一份数据有多少个副本。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/XGVFbm3ZDoqeRVxQeblc71dJnjb.png"></p>
+<p>在这个三节点的集群中，DATA-1 有 2 个副本，DATA-2 有 3 个副本，DATA-3 有 1 个副本。也就是说，副本数可以不等于节点数，不同的数据可以有不同的副本数。</p>
+<ul>
+<li>W，又称写一致性级别（Write Consistency Level），表示成功完成 W 个副本更新，才完成写操作。</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/F4IQb2Ac6o3Ppwx8nddc66N2nmh.png"></p>
+<p>从图中你可以看到，DATA-2 的写副本数为 2，也就说，对 DATA-2 执行写操作时，完成了 2 个副本的更新（比如节点 A、C），才完成写操作。</p>
+<ul>
+<li>R，又称读一致性级别（Read Consistency Level），表示读取一个数据对象时需要读 R 个副本。你可以这么理解，读取指定数据时，要读 R 副本，然后返回 R 个副本中最新的那份数据。</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/KOCfb0E5hoGU6Yx1ggmcLZnTnYd.png"></p>
+<p>从图中你可以看到，DATA-2 的读副本数为 2。也就是说，客户端读取 DATA-2 的数据时，需要读取 2 个副本中的数据，然后返回最新的那份数据。</p>
+<p>需要注意的是，无论客户端如何执行读操作，哪怕它访问的是写操作未强制更新副本数据的节点（比如节点 B），但因为 W(2) + R(2) &gt; N(3)，也就是说，访问节点 B，执行读操作时，因为要读 2 份数据副本，所以除了节点 B 上的 DATA-2，还会读取节点 A 或节点 C 上的 DATA-2，就像上图的样子（比如节点 C 上的 DATA-2），而节点 A 和节点 C 的 DATA-2 数据副本是强制更新成功的。这个时候，返回给客户端肯定是最新的那份数据。</p>
+<ul>
+<li><p>关于 NWR 需要你注意的是，N、W、R 值的不同组合，会产生不同的一致性效果，具体来说，有这么两种效果：</p>
+<ul>
+<li>当 W + R &gt; N 的时候，对于客户端来讲，整个系统能保证强一致性，一定能返回更新后的那份数据。</li>
+<li>当 W + R &lt; N 的时候，对于客户端来讲，整个系统只能保证最终一致性，可能会返回旧数据。</li>
+</ul>
+</li>
+<li><p>小结</p>
+<ul>
+<li>一般而言，不推荐副本数超过当前的节点数，因为当副本数据超过节点数时，就会出现同一个节点存在多个副本的情况。当这个节点故障时，上面的多个副本就都受到影响了。</li>
+<li>当 W + R &gt; N 时，可以实现强一致性。另外，如何设置 N、W、R 值，取决于我们想优化哪方面的性能。比如，N 决定了副本的冗余备份能力；如果设置 W &#x3D; N，读性能比较好；如果设置 R &#x3D; N，写性能比较好；如果设置 W &#x3D; (N + 1) &#x2F; 2、R &#x3D; (N + 1) &#x2F; 2，容错能力比较好，能容忍少数节点（也就是 (N - 1) &#x2F; 2）的故障。</li>
+</ul>
+</li>
+</ul>
+<h3 id="PBFT-算法"><a href="#PBFT-算法" class="headerlink" title="PBFT 算法"></a>PBFT 算法</h3><p>事实上，前文提到的口信消息型拜占庭问题之解是一个非常理论化的算法，没有和实际场景结合，也没有考虑如何在实际场景中落地和实现。</p>
+<p>比如，它实现的是在拜占庭错误场景下，忠将们如何在叛徒干扰时，就一致行动达成共识。但是它并不关心结果是什么，这会出现一种情况：现在适合进攻，但将军们达成的最终共识却是撤退。</p>
+<p>很显然，这不是我们想要的结果。因为在实际场景中，我们需要就提议的一系列值（而不是单值），即使在拜占庭错误发生的时候也能被达成共识。那你要怎么做呢？答案就是掌握 <strong>PBFT 算法</strong>。</p>
+<p><strong>PBFT 算法非常实用，是一种能在实际场景中落地的拜占庭容错算法，它在区块链中应用广泛（比如 Hyperledger Sawtooth、Zilliqa）。</strong></p>
+<ul>
+<li><p>口信消息型拜占庭问题之解的局限</p>
+<ul>
+<li>这个算法有个非常致命的缺陷。如果将军数为 n、叛将数为 f，那么算法需要递归协商 f+1 轮，消息复杂度为 O(n ^ (f + 1))，消息数量指数级暴增。如果叛将数为 64，消息数已经远远超过 <strong>int64</strong> 所能表示的了，这是无法想象的。</li>
+<li>尽管对于签名消息，不管叛将数（比如 f）是多少，经过 f + 1 轮的协商，忠将们都能达成一致的作战指令，但是这个算法同样存在“理论化”和“消息数指数级暴增”的痛点。</li>
+</ul>
+</li>
+<li><p>PBFT 如何达成共识</p>
+<ul>
+<li><p>PBFT 算法是通过签名（或消息认证码 MAC）约束恶意节点的行为，也就是说，每个节点都可以通过验证消息签名确认消息的发送来源，一个节点无法伪造另外一个节点的消息。最终，基于大多数原则（2f + 1）实现共识的。</p>
+</li>
+<li><p>最终的共识是否达成，客户端是会做判断的，如果客户端在指定时间内未收到请求对应的 f + 1 相同响应，就认为集群出故障了，共识未达成，客户端会重新发送请求。</p>
+</li>
+<li><p>PBFT 算法通过视图变更（View Change）的方式，来处理主节点作恶，当发现主节点在作恶时，会以“轮流上岗”方式，推举新的主节点。</p>
+</li>
+<li><p>尽管 PBFT 算法相比口信消息型拜占庭之解已经有了很大的优化，将消息复杂度从 O(n ^ (f + 1)) 降低为 O(n ^ 2)，能在实际场景中落地，并解决实际的共识问题。但 PBFT 还是需要比较多的消息。</p>
+</li>
+<li><p>比如在 13 节点集群中（f 为 4）：</p>
+<ul>
+<li>请求消息：1</li>
+<li>预准备消息：3f &#x3D; 12</li>
+<li>准备消息：3f * (3f - f) &#x3D; 96 提交消息：(3f - f + 1) * (3f + 1)&#x3D; 117</li>
+<li>回复消息：3f - 1 &#x3D; 11</li>
+</ul>
+</li>
+<li><p>也就是说，一次共识协商需要 237 个消息，所以推荐在中小型分布式系统中使用 PBFT 算法。</p>
+</li>
+</ul>
+</li>
+<li><p>小结</p>
+<ul>
+<li>不管口信消息型拜占庭问题之解，还是签名消息型拜占庭问题之解，都是非常理论化的，未考虑实际场景的需求，而且协商成本非常高，指数级的消息复杂度是很难在实际场景中落地，和解决实际场景问题的。</li>
+<li>PBFT 算法是通过签名（或消息认证码 MAC）约束恶意节点的行为，采用三阶段协议，基于大多数原则达成共识的。另外，与口信消息型拜占庭问题之解（以及签名消息型拜占庭问题之解）不同的是，PBFT 算法实现的是一系列值的共识，而不是单值的共识。</li>
+</ul>
+</li>
+<li><p>与其他算法区别</p>
+<ul>
+<li>相比 Raft 算法完全不适应有人作恶的场景，PBFT 算法能容忍 (n - 1)&#x2F;3 个恶意节点 (也可以是故障节点)。</li>
+<li>相比 PoW 算法，PBFT 的优点是不消耗算力，所以在日常实践中，PBFT 比较适用于相对“可信”的场景中，比如联盟链。</li>
+<li>PBFT 算法与 Raft 算法类似，也存在一个“领导者”（就是主节点），同样，集群的性能也受限于“领导者”。另外，O(n ^ 2) 的消息复杂度，以及随着消息数的增加，网络时延对系统运行的影响也会越大，这些都限制了运行 PBFT 算法的分布式系统的规模，也决定了 PBFT 算法适用于中小型分布式系统。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Pow-算法"><a href="#Pow-算法" class="headerlink" title="Pow 算法"></a>Pow 算法</h3><p>口信消息型拜占庭问题之解、PBFT 算法虽然能防止坏人作恶，但只能防止少数的坏人作恶，也就是 (n - 1) &#x2F; 3 个坏人 (其中 n 为节点数)。可如果区块链也只能防止一定比例的坏人作恶，那就麻烦了，因为坏人可以不断增加节点数，轻松突破 (n - 1) &#x2F; 3 的限制。</p>
+<p>那区块链是如何改进这个问题的呢？答案就是 <strong>PoW 算法</strong>。</p>
+<p>区块链通过工作量证明（<strong>Proof of Work</strong>）增加了坏人作恶的成本，以此防止坏人作恶。比如，如果坏人要发起 51% 攻击，需要控制现网 51% 的算力，成本是非常高昂的。</p>
+<ul>
+<li><p>PoW 是如何运行的</p>
+<ul>
+<li>工作量证明 (Proof Of Work，简称 PoW)，具体来说就是，客户端需要做一定难度的工作才能得出一个结果，验证方却很容易通过结果来检查出客户端是不是做了相应的工作。</li>
+<li>工作量证明过程</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/SYQabIxeVop1Ysx7nsIcHdTIn4d.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- 请求方做了一些运算，解决了某个问题，然后把运算结果发送给验证方，进行核验，验证方根据运算结果，就能判断请求方是否做了相关的工作。</span><br><span class="line"></span><br><span class="line">- 需要注意的是，这个算法具有不对称性，也就是说，工作对于请求方是有难度的，对于验证方则是比较简单的，易于验证的。  </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>区块链的工作量证明</p>
+<ul>
+<li>区块链是通过执行哈希运算，然后通过运算后的结果值，证明自己做过了相关工作。</li>
+<li>举个例子，我们给出的工作量要求是，基于一个基本的字符串（比如”geektime”），你可以在这个字符串后面添加一个整数值，然后对变更后（添加整数值) 的字符串进行 SHA256 哈希运算，如果运算后得到的哈希值（16 进制形式）是以”0000”开头的，就验证通过。为了达到这个工作量证明的目标，我们需要不停地递增整数值，一个一个试，对得到的新字符串进行 SHA256 哈希运算。</li>
+<li>按照这个规则，我们需要经过 35024 次计算，才能找到恰好前 4 位为 0 的哈希值。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;geektime0&quot; <span class="operator">=</span><span class="operator">&gt;</span> <span class="number">01</span>f28c5df06ef0a575fd0e529be9a6f73b1290794762de014ec84182081e118e </span><br><span class="line">&quot;geektime1&quot; <span class="operator">=</span><span class="operator">&gt;</span> a2567c06fdb5775cb1e3ce17b72754cf146fcc6da75c8f1d87d7ab6a1b8c4523 </span><br><span class="line">... </span><br><span class="line">&quot;geektime35022&quot; <span class="operator">=</span><span class="operator">&gt;</span> </span><br><span class="line"><span class="number">8</span>afc85049a9e92fe0b6c98b02b27c09fb869fbfe273d0ab84ad8c5ac17b8627e </span><br><span class="line">&quot;geektime35023&quot; <span class="operator">=</span><span class="operator">&gt;</span> </span><br><span class="line"><span class="number">0000</span>ec5927ba10ea45a6822dcc205050ae74ae1ad2d9d41e978e1ec9762dc404</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 区块链的工作量证明就是如上通过执行哈希运算，经过一段时间的计算后，得到符合条件的哈希值。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>区块链如何实现 PoW 算法</li>
+</ul>
+<p>在区块链中，PoW 算法是基于区块链中的区块信息，进行哈希运算的。</p>
+<p>区块链的区块，是由区块头、区块体 2 部分组成的。</p>
+<ul>
+<li>区块头（Block Head）：区块头主要由上一个区块的哈希值、区块体的哈希值、4 字节的随机数（nonce）等组成的。</li>
+<li>区块体（Block Body）：区块包含的交易数据，其中的第一笔交易是 Coinbase 交易，这是一笔激励矿工的特殊交易。</li>
+</ul>
+<p>拥有 80 字节固定长度的区块头，就是用于区块链工作量证明的哈希运算中输入字符串，而且通过双重 SHA256 哈希运算（也就是对 SHA256 哈希运算的结果，再执行一次哈希运算），计算出的哈希值，只有小于目标值（target），才是有效的，否则哈希值是无效的，必须重算。</p>
+<p>在区块链中是通过对区块头执行 SHA256 哈希运算，得到小于目标值的哈希值，来证明自己的工作量的。</p>
+<p>计算出符合条件的哈希值后，矿工就会把这个信息广播给集群中所有其他节点，其他节点验证通过后，会将这个区块加入到自己的区块链中，最终形成一串区块链。</p>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/WHSdbrX8monXCOxwTcfcIEernxc.png"></p>
+<ul>
+<li><p>小结</p>
+<ul>
+<li>在比特币的区块链中，PoW 算法，是通过 SHA256 进行哈希运算，计算出符合指定条件的哈希值，来证明工作量的。</li>
+<li>51% 攻击，本质是因为比特币的区块链约定了“最长链胜出，其它节点在这条链基础上扩展”，攻击者可以通过优势算力实现对最长链的争夺。</li>
+<li>除了通过 PoW 算法，增加坏人作恶的成本，比特币还通过“挖矿得币”奖励好人，最终保持了整个系统的运行稳定。</li>
+</ul>
+</li>
+<li><p>拜占庭容错算法（比如 PoW 算法、PBFT 算法），能容忍一定比例的作恶行为，所以它在相对开放的场景中应用广泛，比如公链、联盟链。非拜占庭容错算法（比如 Raft）无法对作恶行为进行容错，主要用于封闭、绝对可信的场景中，比如私链、公司内网的 DevOps 环境。</p>
+</li>
+</ul>
+<h3 id="ZAB-协议"><a href="#ZAB-协议" class="headerlink" title="ZAB 协议"></a>ZAB 协议</h3><p>在 ZooKeeper 中，能用兰伯特的 Multi-Paxos 实现各节点数据的共识和一致吗？</p>
+<p>当然不行。因为兰伯特的 Multi-Paxos，虽然能保证达成共识后的值不再改变，但它不管关心达成共识的值是什么，也无法保证各值（也就是操作）的顺序性。</p>
+<p>而这个问题最终是由 ZAB 协议着力解决的，同时也是理解 ZAB 协议的关键。然而 ZAB 协议和 ZooKeeper 代码耦合在一起，也就是说，你是无法单独使用 ZAB 协议的，所以一般而言，只需要理解 ZAB 协议的架构和基础原理就可以了，不需要对代码和细节做太多的深究。</p>
+<ul>
+<li>为什么 Multi-Paxos 无法实现操作顺序性</li>
+</ul>
+<p>兰伯特的 Multi-Paxos 解决的是一系列值如何达成共识的问题，它关心的是，对于指定序号的位置，最多只有一个指令（Command）会被选定，但它不关心选定的是哪个指令，也就是说，它不关心指令的顺序性（也就是操作的顺序性）。</p>
+<ul>
+<li><p>ZAB 是如何保证操作的顺序性</p>
+<ul>
+<li><p>与兰伯特的 Multi-Paxos 不同，ZAB 不是共识算法，不基于状态机，而是基于主备模式的原子广播协议，最终实现了操作的顺序性。</p>
+</li>
+<li><p>主备，就是 Master-Slave 模型，一个主节点和多个备份节点，所有副本的数据都以主节点为准，主节点采用二阶段提交，向备份节点同步数据，如果主节点发生故障，数据最完备的节点将当选主节点。而原子广播协议，可以理解成广播一组消息，消息的顺序是固定的。</p>
+</li>
+<li><p>需要注意的是，ZAB 在这里做了个优化，为了实现分区容错能力，将数据复制到大多数节点后（也就是如果大多数节点准备好了），领导者就会进入提交执行阶段，通知备份节点执行提交操作。<strong>在这一点上，Raft 和 ZAB 是类似的，可以对比着 Raft 算法来理解 ZAB。</strong></p>
+</li>
+<li><p>什么是状态机</p>
+<ul>
+<li>本质上来说，状态机指的是有限状态机，它是一个数学模型。可以这么理解：状态机是一个功能模块，用来处理一系列请求，最大的特点就是确定性，也就是说，对于相同的输入，不管重复运行多少次，最终的内部状态和输出都是相同的。</li>
+<li>Multi-Paxos、Raft 都是共识算法，而共识算法是就一系列值达成共识的，达成共识后，这个值就不能改了。但有时候我们是需要更改数据的值的，比如 KV 存储，我们肯定需要更改指定 key（比如 X）对应的值，这时我们就可以通过状态机来解决这个问题。比如，如果你想把 X 的值改为 7，那你可以提议一个新的指令“SET X &#x3D; 7”，当这个指令被达成共识并提交到状态机后，你查询到的值就是 7 了，也就成功修改了 X 的值。</li>
+</ul>
+</li>
+<li><p>如何实现操作的顺序性</p>
+<ul>
+<li>首先，ZAB 实现了主备模式，也就是所有的数据都以主节点为准：</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/F97ZbtP8Oo8m5NxvEUkca9i7nof.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- 其次，ZAB 实现了 FIFO 队列，保证消息处理的顺序性。 </span><br><span class="line"></span><br><span class="line">- 另外，ZAB 还实现了当主节点崩溃后，只有日志最完备的节点才能当选主节点，因为日志最完备的节点包含了所有已经提交的日志，所以这样就能保证提交的日志不会再改变。 </span><br><span class="line"></span><br><span class="line">- ZAB 协议通过这几个特性就能保证后来的操作不会比当前的操作先执行，也就能保证节点&quot;/geekbang&quot;会在节点&quot;/geekbang/time&quot;之前创建。</span><br><span class="line"></span><br><span class="line">- 可以类比 Raft 来理解，在 Raft 中： </span><br><span class="line"></span><br><span class="line">  - 所有日志以领导者的为准； </span><br><span class="line"></span><br><span class="line">  - 领导者接收到客户端请求后，会基于请求中的指令，创建日志项，并将日志项缓存在本地，然后按照顺序，复制到其他节点和提交 ; </span><br><span class="line"></span><br><span class="line">  - 在 Raft 中，也是日志最完备的节点才能当选领导者。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>小结</p>
+<ul>
+<li>状态机最大的特点是确定性，对于相同的输入不管运行多少次，最终的内部状态和输出都是相同的。需要你注意的是，在共识算法中，我们可以通过提议新的指令，达成共识后，提交给状态机执行，来达到修改指定内容的效果，比如修改 KV 存储中指定 key 对应的值。</li>
+<li>ZAB 是通过“一切以领导者为准”的强领导者模型和严格按照顺序提交日志，来实现操作的顺序性的，这一点和 Raft 是一样的。</li>
+</ul>
+</li>
+</ul>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="-1"><a href="#-1" class="headerlink" title=""></a></h3></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://kafumio.github.io">夜航船</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://kafumio.github.io/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/">https://kafumio.github.io/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://kafumio.github.io" target="_blank">夜航船</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95/">算法</a><a class="post-meta__tags" href="/tags/%E5%8D%8F%E8%AE%AE/">协议</a></div><div class="post_share"><div class="social-share" data-image="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/cover.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/title/avatar1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">夜航船</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Kafumio"><i class="fab fa-github"></i><span>Github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Kafumio" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:linzehong1_2020@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">风起于青萍之末</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">分布式协议与算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%85%E9%9A%9C"><span class="toc-number">1.1.</span> <span class="toc-text">分布式故障</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.1.</span> <span class="toc-text">拜占庭将军问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number">1.2.</span> <span class="toc-text">理论基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CAP-%E7%90%86%E8%AE%BA"><span class="toc-number">1.2.1.</span> <span class="toc-text">CAP 理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ACID-%E7%90%86%E8%AE%BA"><span class="toc-number">1.2.2.</span> <span class="toc-text">ACID 理论</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#BASE-%E7%90%86%E8%AE%BA"><span class="toc-number">1.2.3.</span> <span class="toc-text">BASE 理论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-number">1.3.</span> <span class="toc-text">分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-number">1.3.1.</span> <span class="toc-text">两阶段提交</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TCC%EF%BC%88Try-Confirm-Cancel%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">TCC（Try-Confirm-Cancel） </span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4"><span class="toc-number">1.3.3.</span> <span class="toc-text">三阶段提交</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.</span> <span class="toc-text">协议与算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Paxos-%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.1.</span> <span class="toc-text">Paxos 算法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Basic-Paxos"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">Basic Paxos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Multi-Paxos"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">Multi-Paxos</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Raft-%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.2.</span> <span class="toc-text">Raft 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.3.</span> <span class="toc-text">一致性哈希算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Gossip-%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.4.</span> <span class="toc-text">Gossip 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Quorum-NWR-%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.5.</span> <span class="toc-text">Quorum NWR 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PBFT-%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.6.</span> <span class="toc-text">PBFT 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pow-%E7%AE%97%E6%B3%95"><span class="toc-number">1.4.7.</span> <span class="toc-text">Pow 算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZAB-%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.8.</span> <span class="toc-text">ZAB 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-number">1.4.9.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#-1"><span class="toc-number">1.4.10.</span> <span class="toc-text"></span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/" title="一文了解分布式协议与算法"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/fenbushi/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一文了解分布式协议与算法"/></a><div class="content"><a class="title" href="/2023/04/07/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%AE%AE%E4%B8%8E%E7%AE%97%E6%B3%95/" title="一文了解分布式协议与算法">一文了解分布式协议与算法</a><time datetime="2023-04-07T14:20:34.000Z" title="发表于 2023-04-07 22:20:34">2023-04-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/06/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3mysql%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84%E5%8F%8A%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" title="一文了解mysql内部架构及执行过程"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/mysql_1/cover.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一文了解mysql内部架构及执行过程"/></a><div class="content"><a class="title" href="/2023/04/06/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3mysql%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84%E5%8F%8A%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B/" title="一文了解mysql内部架构及执行过程">一文了解mysql内部架构及执行过程</a><time datetime="2023-04-06T08:07:05.000Z" title="发表于 2023-04-06 16:07:05">2023-04-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/04/03/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3GO%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="一文了解GO垃圾回收与内存管理"><img src="https://kafumio-blog.oss-cn-beijing.aliyuncs.com/article/go_gc/99435249.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一文了解GO垃圾回收与内存管理"/></a><div class="content"><a class="title" href="/2023/04/03/%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3GO%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E4%B8%8E%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="一文了解GO垃圾回收与内存管理">一文了解GO垃圾回收与内存管理</a><time datetime="2023-04-03T07:21:16.000Z" title="发表于 2023-04-03 15:21:16">2023-04-03</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By 夜航船</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text"><a href="https://icp.gov.moe/?keyword=20230242" target="_blank">萌ICP备20230242号</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadGitalk () {
+  function initGitalk () {
+    var gitalk = new Gitalk(Object.assign({
+      clientID: '0344d36a06c71e0f222d',
+      clientSecret: 'a3cf4436670fa608bda0b273e2e90207aeb4c5a8',
+      repo: 'kafumio.github.io',
+      owner: 'Kafumio',
+      admin: ['Kafumio'],
+      id: 'aaa5357be139b55b6b93d7b0bbdf0ab5',
+      updateCountCallback: commentCount
+    },null))
+
+    gitalk.render('gitalk-container')
+  }
+
+  if (typeof Gitalk === 'function') initGitalk()
+  else {
+    getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+    getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js').then(initGitalk)
+  }
+}
+
+function commentCount(n){
+  let isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+  if (isCommentCount) {
+    isCommentCount.innerHTML= n
+  }
+}
+
+if ('Gitalk' === 'Gitalk' || !false) {
+  if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+  else loadGitalk()
+} else {
+  function loadOtherComment () {
+    loadGitalk()
+  }
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
